@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "DDF",
-    "slug": "DDF",
+    "slug": "ddf",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "605e9d5e-42ad-4318-9c9e-dfd9d10d47df"
+      }
+    },
+    "owner": "armanceau"
   }
 }

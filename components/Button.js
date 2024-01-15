@@ -1,22 +1,16 @@
-import { StyleSheet, View, Pressable, Text, onPress } from "react-native";
+import { StyleSheet, View, Pressable, TouchableOpacity, Text, onPress } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function Button({label}){
+export default function Button({label, link, onPress }){
     return (
-        <View style={[styles.buttonContainer, { borderWidth: 4, borderColor: "#ffd33d", borderRadius: 18 }]}>
+      <View style={styles.container}>
         <Pressable
-            style={[styles.button, { backgroundColor: '#fff' }]}
-            onPress={onPress}
+          style={styles.button}
+          onPress={() => onPress(link)}
         >
-            <Text style={[styles.buttonLabel, { color: "#25292e" }]}>{label}</Text>
-            <FontAwesome
-            name="rightcircleo"
-            size={18}
-            color="#25292e"
-            style={styles.buttonIcon}
-            />
+          <Text style={styles.buttonText}>{label}</Text>
         </Pressable>
-        </View>
+      </View>
     );
 }
 
@@ -43,5 +37,15 @@ const styles = StyleSheet.create({
     buttonLabel: {
       color: '#fff',
       fontSize: 16,
+    },
+    button: {
+      backgroundColor: '#F8945C',
+      borderRadius: 10,
+      padding: 10,
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 20,
+      textAlign: 'center',
     },
   });
