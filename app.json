@@ -15,13 +15,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.armanceau.ddf"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#10B4A4"
-      }
+      },
+      "package": "com.armanceau.ddf"
     },
     "web": {
       "favicon": "./assets/favicon.png"
