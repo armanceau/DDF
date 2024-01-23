@@ -124,7 +124,7 @@ export default function App() {
       console.log('Bonne réponse!');
       setScore(score + 1);
     } else {
-      console.log('Mauvaise réponse!');
+      console.log('Mauvaise réponsee!');
     }
 
     // Charger une nouvelle question aléatoires
