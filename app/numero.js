@@ -16,7 +16,8 @@ export default function App() {
     db.transaction((tx) => {
       // Création de la table
       tx.executeSql(
-        "CREATE TABLE departements (id INTEGER PRIMARY KEY AUTOINCREMENT, numero INTEGER, nom TEXT)",
+        //"DROP Table departements",
+        "CREATE TABLE IF NOT EXISTS departements (id INTEGER PRIMARY KEY AUTOINCREMENT, numero INT, nom TEXT)",
         [],
         (txObj, resultSet) => {
           // Vérification si la table est vide
@@ -29,37 +30,20 @@ export default function App() {
               if (rowCount === 0) {
                 // La table est vide, effectuez l'insertion
                 txObj.executeSql(
-                  "INSERT INTO departements (numero, nom) VALUES (?, ?), (?, ?), (?, ?), (?, ?)",
-                  [1, 'Ain', 2, 'Aisne', 3, 'Allier', 6, 'Alpes-Maritimes'],
-                  (txObj, resultSet) => {
+                  "INSERT INTO departements (numero, nom) VALUES (1, 'Ain'),   (2, 'Aisne'),   (3, 'Allier'),   (4, 'Alpes-de-Haute-Provence'),   (5, 'Hautes-Alpes'),   (6, 'Alpes-Maritimes'),   (7, 'Ardèche'),   (8, 'Ardennes'),   (9, 'Ariège'),   (10, 'Aube'),   (11, 'Aude'),   (12, 'Aveyron'),   (13, 'Bouches-du-Rhône'),   (14, 'Calvados'),   (15, 'Cantal'),   (16, 'Charente'),   (17, 'Charente-Maritime'),   (18, 'Cher'),   (19, 'Corrèze'), (20, 'Corse'),  (21, 'Cote-d Or'),   (22, 'Cotes-d Armor'),   (23, 'Creuse'),   (24, 'Dordogne'),   (25, 'Doubs'),   (26, 'Drôme'),   (27, 'Eure'),   (28, 'Eure-et-Loir'),   (29, 'Finistère'),   (30, 'Gard'),   (31, 'Haute-Garonne'),   (32, 'Gers'),   (33, 'Gironde'),   (34, 'Hérault'),   (35, 'Ille-et-Vilaine'),   (36, 'Indre'),   (37, 'Indre-et-Loire'),   (38, 'Isère'),   (39, 'Jura'),   (40, 'Landes'),   (41, 'Loir-et-Cher'),   (42, 'Loire'),   (43, 'Haute-Loire'),   (44, 'Loire-Atlantique'),   (45, 'Loiret'),   (46, 'Lot'),   (47, 'Lot-et-Garonne'),   (48, 'Lozère'),   (49, 'Maine-et-Loire'),   (50, 'Manche'),   (51, 'Marne'),   (52, 'Haute-Marne'),   (53, 'Mayenne'),   (54, 'Meurthe-et-Moselle'),   (55, 'Meuse'),   (56, 'Morbihan'),   (57, 'Moselle'),   (58, 'Nievre'),   (59, 'Nord'),   (60, 'Oise'),   (61, 'Orne'),   (62, 'Pas-de-Calais'),   (63, 'Puy-de-Dôme'),   (64, 'Pyrénées-Atlantiques'),   (65, 'Hautes-Pyrénées'),   (66, 'Pyrénées-Orientales'),   (67, 'Bas-Rhin'),   (68, 'Haut-Rhin'),   (69, 'Rhône'),   (70, 'Haute-Saône'),   (71, 'Saône-et-Loire'),   (72, 'Sarthe'),   (73, 'Savoie'),   (74, 'Haute-Savoie'),   (75, 'Paris'),   (76, 'Seine-Maritime'),   (77, 'Seine-et-Marne'),   (78, 'Yvelines'),   (79, 'Deux-Sèvres'),   (80, 'Somme'),   (81, 'Tarn'),   (82, 'Tarn-et-Garonne'),   (83, 'Var'),   (84, 'Vaucluse'),   (85, 'Vendée'),   (86, 'Vienne'),   (87, 'Haute-Vienne'),   (88, 'Vosges'),   (89, 'Yonne'),   (90, 'Territoire de Belfort'),   (91, 'Essonne'),   (92, 'Hauts-de-Seine'),   (93, 'Seine-Saint-Denis'),   (94, 'Val-de-Marne'),   (95, 'Val-d''Oise'),   (971, 'Guadeloupe'),   (972, 'Martinique'),   (973, 'Guyane'),   (974, 'La Reunion'),   (976, 'Mayotte')",
+                 (txObj, resultSet) => {
                     // Vous pouvez ajouter d'autres transactions d'insertion si nécessaire
                   },
                   (txObj, error) => console.log(error)
                 );
               } else {
-                // La table n'est pas vide, vous pouvez effectuer une action différente si nécessaire
+                // La table n'est pas vide
               }
             },
             (txObj, error) => console.log(error)
           );
         },
         //(txObj, error) => console.log(error)
-      );
-    });
-  
-    // Récupération des données
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM departements',
-        [],
-        (txObj, resultSet) => {
-          const rows = resultSet.rows._array;
-          const updatedDepartements = rows.map((departement) => {
-            return { id: departement.id, numero: departement.numero, nom: departement.nom };
-          });
-          setDepartements(updatedDepartements);
-        },
-        (txObj, error) => console.log(error)
       );
     });
   
@@ -70,79 +54,49 @@ export default function App() {
   const loadRandomQuestion = () => {
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT COUNT(*) as count FROM departements',
+        'SELECT * FROM departements Order by random() LIMIT 4',
         [],
         (txObj, resultSet) => {
-          const rowCount = resultSet.rows.item(0).count;
-          const randomIndex = Math.floor(Math.random() * rowCount) + 1;
+          const randomQuestion = resultSet.rows.item(0);
+          setQuestion(randomQuestion);
 
-          txObj.executeSql(
-            'SELECT * FROM departements WHERE id = ?',
-            [randomIndex],
-            (txObj, resultSet) => {
-              const randomQuestion = resultSet.rows.item(0);
-              setQuestion(randomQuestion);
-              setOptions(generateRandomOptions(randomQuestion));
-            },
-            (txObj, error) => console.log(error)
-          );
+          let currentIndex = resultSet.rows._array.length,  randomIndex;
+
+          // While there remain elements to shuffle.
+          while (currentIndex > 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [resultSet.rows._array[currentIndex], resultSet.rows._array[randomIndex]] = [
+              resultSet.rows._array[randomIndex], resultSet.rows._array[currentIndex]];
+          }
+          setOptions(resultSet.rows._array);       
         },
-        (txObj, error) => console.log(error+"test")
       );
     });
   }; 
-
-  const generateRandomOptions = (correctAnswer) => {
-    const options = [correctAnswer.nom];
-    const incorrectOptions = getIncorrectOptions(correctAnswer);
-    while (options.length < 4) {
-      const randomIndex = Math.floor(Math.random() * incorrectOptions.length);
-      const randomIncorrectOption = incorrectOptions.splice(randomIndex, 1)[0];
-      options.push(randomIncorrectOption.nom);
-    }
-    return shuffleArray(options);
-  };
 
   const getIncorrectOptions = (correctAnswer) => {
     return departements.filter((departement) => departement.id !== correctAnswer.id);
   };
 
-  const shuffleArray = (array) => {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-    return shuffledArray;
-  };
-
   const handleAnswer = (selectedOption) => {
     setTotalQuestions(totalQuestions + 1);
-
+  
     // Vérifier si la réponse est correcte en comparant avec la réponse correcte stockée dans la base de données
-    if (selectedOption === question.nom) {
+    console.log(selectedOption.nom, question.nom);
+    if (selectedOption.nom === question.nom) {
       console.log('Bonne réponse!');
       setScore(score + 1);
     } else {
-      console.log('Mauvaise réponsee!');
+      console.log('Mauvaise réponse!');
     }
-
+  
     // Charger une nouvelle question aléatoires
     loadRandomQuestion();
-  };
-  
-  const showOptions = () => {
-    return options.map((option, index) => (
-      <View style={styles.optionsContainer}>
-        <TouchableOpacity style={[
-            styles.optionBtn,
-            option === question.nom ? styles.correctOption : styles.incorrectOption,
-          ]} key={index} onPress={() => handleAnswer(option)}>
-          <Text style={styles.optionText}>{option}</Text>
-        </TouchableOpacity>
-      </View>
-      
-    ));
   };
 
   return (
@@ -151,7 +105,18 @@ export default function App() {
       <View style={styles.containerScore}>
         <Text style={styles.score}>{score}/{totalQuestions}</Text>
       </View>
-      {showOptions()}
+      {
+        options.map((option, index) => (
+          <View key={index} style={styles.optionsContainer}>
+            <TouchableOpacity style={[
+                styles.optionBtn,
+                option === question.nom ? styles.correctOption : styles.incorrectOption,
+              ]} key={index} onPress={() => handleAnswer(option)}>
+              <Text style={styles.optionText}>{option.nom}</Text>
+            </TouchableOpacity>
+          </View>    
+        ))
+      }
       <StatusBar style="auto" />
     </View>
   );
