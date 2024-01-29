@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import { useState, useEffect } from 'react';
 
@@ -12,6 +12,7 @@ export default function App() {
   const [allOptions, setAllOptions] = useState([]);
   const [availableOptions, setAvailableOptions] = useState([]);
   const [score, setScore] = useState(0);
+  const [life, setLife] = useState(['❤️','❤️','❤️' ]);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   useEffect(() => {
@@ -70,8 +71,7 @@ export default function App() {
     let options2 = [];
     
     questionIndex = Math.floor(Math.random() * availableOptions.length);
-    // console.log(allOptions);
-    // console.log(availableOptions);
+
     while(options2.length < 3){
       optIndex = Math.floor(Math.random() * allOptions.length);
       let good = true;
@@ -95,8 +95,6 @@ export default function App() {
 
     setQuestion(question[0]);
     setOptions(options2);   
-    
-    //100 départements
   }; 
 
   const getIncorrectOptions = (correctAnswer) => {
@@ -107,42 +105,86 @@ export default function App() {
     setTotalQuestions(totalQuestions + 1);
   
     // Vérifier si la réponse est correcte en comparant avec la réponse correcte stockée dans la base de données
-    //console.log(selectedOption.nom, question.nom);
     if (selectedOption.nom === question.nom) {
       console.log('Bonne réponse!');
       setScore(score + 1);
     } else {
       console.log('Mauvaise réponse!');
+      life.splice(0,1);
     }
   
     // Charger une nouvelle question aléatoires
     loadRandomQuestion();
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.numero}>{question.numero}</Text>
-      <View style={styles.containerScore}>
-        <Text style={styles.score}>{score}/{totalQuestions}</Text>
+  if ((availableOptions.length === 0) || (life.length === 0)) {
+    let additionalContent = null;
+
+    if (score <= 45) {
+      additionalContent = 
+        <View style={styles.Imagecontainer}>
+          <Image
+            style={styles.image}
+            source={require("../assets/score-45.png")} 
+          />
+        </View>;
+    }
+    else if (score > 45 && score <= 75) {
+      additionalContent = 
+        <View style={styles.Imagecontainer}>
+          <Image
+            style={styles.image}
+            source={require("../assets/score-75.png")} 
+          />
+        </View>;
+    }
+    else if (score >= 92) {
+      additionalContent = 
+        <View style={styles.Imagecontainer}>
+          <Image
+            style={styles.image}
+            source={require("../assets/score-90.png")} 
+          />
+        </View>;
+    }
+  
+    return (
+      <View style={styles.container}>
+        {additionalContent}
+        <Text style={styles.scoreFinal}>{score}/{totalQuestions}</Text>
+        <StatusBar style="auto" />
       </View>
-      <View style={styles.containerLife}>
-        <Text style={styles.life}>life</Text>
+    );
+  } 
+  else
+  { 
+  
+    return (
+      <View style={styles.container}>
+        <Text style={styles.numero}>{question.numero}</Text>
+        <View style={styles.containerScore}>
+          <Text style={styles.score}>{score}/{totalQuestions}</Text>
+        </View>
+        <View style={styles.containerLife}>
+          <Text style={styles.life}>{life}</Text>
+        </View>
+        
+        {
+          options.map((option, index) => (
+            <View key={index} style={styles.optionsContainer}>
+              <TouchableOpacity style={[
+                  styles.optionBtn,
+                  option === question.nom ? styles.correctOption : styles.incorrectOption,
+                ]} key={index} onPress={() => handleAnswer(option)}>
+                <Text style={styles.optionText}>{option.nom}</Text>
+              </TouchableOpacity>
+            </View>    
+          ))
+        }
+        <StatusBar style="auto" />
       </View>
-      {
-        options.map((option, index) => (
-          <View key={index} style={styles.optionsContainer}>
-            <TouchableOpacity style={[
-                styles.optionBtn,
-                option === question.nom ? styles.correctOption : styles.incorrectOption,
-              ]} key={index} onPress={() => handleAnswer(option)}>
-              <Text style={styles.optionText}>{option.nom}</Text>
-            </TouchableOpacity>
-          </View>    
-        ))
-      }
-      <StatusBar style="auto" />
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -156,6 +198,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
+  },
+  Imagecontainer: {
+    width: "70%",
+    height: "50%",
+    marginHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 3,
   },
   row: {
     flexDirection: 'row',
@@ -179,6 +229,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerLife: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    borderRadius: 10,
+    width: "fit-content",
+    padding: 10,
+    backgroundColor: "#00C7B3",
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  image: {
+    width: "100%",
+    height: "90%",
+    resizeMode: "cover",
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: "#00C7B3",
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
   numero: {
     fontSize: 80,
     color: '#FFF',
@@ -200,6 +275,10 @@ const styles = StyleSheet.create({
   },
   score: {
     color: '#FFF',
+  },
+  scoreFinal: {
+    color: '#FFF',
+    fontSize: 25,
   },
   // correctOption: {
   //   backgroundColor: '#8BC34A', // Couleur verte pour la réponse correcte
