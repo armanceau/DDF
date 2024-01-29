@@ -9,6 +9,8 @@ export default function App() {
   const [departements, setDepartements] = useState([]);
   const [question, setQuestion] = useState({});
   const [options, setOptions] = useState([]);
+  const [allOptions, setAllOptions] = useState([]);
+  const [availableOptions, setAvailableOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
@@ -36,47 +38,65 @@ export default function App() {
                   },
                   (txObj, error) => console.log(error)
                 );
-              } else {
-                // La table n'est pas vide
               }
+              txObj.executeSql(
+                'SELECT * FROM departements',
+                [],
+                (txObj, resultSet) => {
+                  setAllOptions(resultSet.rows._array);
+                  setAvailableOptions([...resultSet.rows._array]);
+                },
+                (txObj, error) => console.log(error)
+              )
             },
             (txObj, error) => console.log(error)
           );
         },
-        //(txObj, error) => console.log(error)
+        (txObj, error) => console.log(error)
       );
     });
   
-    loadRandomQuestion();
+    //loadRandomQuestion();
     setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    if(allOptions.length > 0 && allOptions.length == availableOptions.length){
+      loadRandomQuestion();
+    }
+  }, [allOptions, availableOptions]);
+
   const loadRandomQuestion = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM departements Order by random() LIMIT 4',
-        [],
-        (txObj, resultSet) => {
-          const randomQuestion = resultSet.rows.item(0);
-          setQuestion(randomQuestion);
+    let options2 = [];
+    
+    questionIndex = Math.floor(Math.random() * availableOptions.length);
+    console.log(allOptions);
+    console.log(availableOptions);
+    while(options2.length < 3){
+      optIndex = Math.floor(Math.random() * allOptions.length);
+      let good = true;
+      
+      if(allOptions[optIndex]["numero"] == availableOptions[questionIndex]["numero"]){
+        good= false; 
+      }  
+    
+      for (let opt of options2) {
+        if (opt['numero'] == allOptions[optIndex]['numero']) {good = false; break;}
+      }
+      if (good) {
+        options2.push(allOptions[optIndex])
+      }
+    }
 
-          let currentIndex = resultSet.rows._array.length,  randomIndex;
+    let question = availableOptions.splice(questionIndex, 1);
+    
+    insertIndex = Math.floor(Math.random() * 4);
+    options2.splice(insertIndex, 0, question[0])
 
-          // While there remain elements to shuffle.
-          while (currentIndex > 0) {
-
-            // Pick a remaining element.
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-            // And swap it with the current element.
-            [resultSet.rows._array[currentIndex], resultSet.rows._array[randomIndex]] = [
-              resultSet.rows._array[randomIndex], resultSet.rows._array[currentIndex]];
-          }
-          setOptions(resultSet.rows._array);       
-        },
-      );
-    });
+    setQuestion(question[0]);
+    setOptions(options2);   
+    
+    //100 départements
   }; 
 
   const getIncorrectOptions = (correctAnswer) => {
