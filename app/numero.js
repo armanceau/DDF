@@ -70,8 +70,8 @@ export default function App() {
     let options2 = [];
     
     questionIndex = Math.floor(Math.random() * availableOptions.length);
-    console.log(allOptions);
-    console.log(availableOptions);
+    // console.log(allOptions);
+    // console.log(availableOptions);
     while(options2.length < 3){
       optIndex = Math.floor(Math.random() * allOptions.length);
       let good = true;
@@ -107,7 +107,7 @@ export default function App() {
     setTotalQuestions(totalQuestions + 1);
   
     // Vérifier si la réponse est correcte en comparant avec la réponse correcte stockée dans la base de données
-    console.log(selectedOption.nom, question.nom);
+    //console.log(selectedOption.nom, question.nom);
     if (selectedOption.nom === question.nom) {
       console.log('Bonne réponse!');
       setScore(score + 1);
@@ -124,6 +124,9 @@ export default function App() {
       <Text style={styles.numero}>{question.numero}</Text>
       <View style={styles.containerScore}>
         <Text style={styles.score}>{score}/{totalQuestions}</Text>
+      </View>
+      <View style={styles.containerLife}>
+        <Text style={styles.life}>life</Text>
       </View>
       {
         options.map((option, index) => (
@@ -163,10 +166,10 @@ const styles = StyleSheet.create({
   },
   containerScore: {
     position: 'absolute',
-    right: 0,
+    left: 0,
     top: 0,
     borderRadius: 10,
-    width: 50,
+    width: 60,
     padding: 10,
     backgroundColor: "#00C7B3",
     shadowOffset: {width: -2, height: 4},
