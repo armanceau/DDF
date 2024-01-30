@@ -1,7 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import * as SQLite from 'expo-sqlite';
 import { useState, useEffect } from 'react';
+import CustomModal from '../components/CustomModal';
+import CustomButton from '../components/CustomButton';
+
+
 
 export default function App() {
   const db = SQLite.openDatabase('example.db');
@@ -14,6 +20,15 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [life, setLife] = useState(['❤️','❤️','❤️' ]);
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const navigation = useNavigation();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     db.transaction((tx) => {
@@ -115,7 +130,7 @@ export default function App() {
   
     // Charger une nouvelle question aléatoires
     loadRandomQuestion();
-  };
+  };  
 
   if ((availableOptions.length === 0) || (life.length === 0)) {
     let additionalContent = null;
@@ -150,13 +165,17 @@ export default function App() {
   
     return (
       <View style={styles.container}>
+        <Text style={styles.scoreFinalTitle}>Fin de partie</Text>
+        <Text style={styles.scoreFinal}>Score : {score}/99</Text>
         {additionalContent}
-        <Text style={styles.scoreFinal}>{score}/{totalQuestions}</Text>
+        
+        <CustomButton label="Rejouer" link="Numero" navigation={navigation} />
+        <CustomButton label="Menu" link="Index" navigation={navigation}/>
         <StatusBar style="auto" />
       </View>
     );
   } 
-  else
+  else 
   { 
   
     return (
@@ -168,6 +187,8 @@ export default function App() {
         <View style={styles.containerLife}>
           <Text style={styles.life}>{life}</Text>
         </View>
+
+        <CustomModal text="Devinez un maximum de départements selon leur numéro. Vous avez 3 vies indiquées par les coeurs en haut à droite."></CustomModal>
         
         {
           options.map((option, index) => (
@@ -181,6 +202,7 @@ export default function App() {
             </View>    
           ))
         }
+
         <StatusBar style="auto" />
       </View>
     );
@@ -279,6 +301,11 @@ const styles = StyleSheet.create({
   scoreFinal: {
     color: '#FFF',
     fontSize: 25,
+  },
+  scoreFinalTitle: {
+    color: '#FFF',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
   // correctOption: {
   //   backgroundColor: '#8BC34A', // Couleur verte pour la réponse correcte
