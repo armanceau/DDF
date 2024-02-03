@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: "95%",
         backgroundColor: '#FFF',
+        //elevation -> android, ios -> ???
         elevation: 5,
         borderRadius: 10,
     },
