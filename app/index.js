@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import CustomPager from '../components/CustomPager';
+import CustomHeader from '../components/CustomHeader';
 import { Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useCallback } from 'react';
@@ -24,15 +25,8 @@ const IndexScreen = ({ navigation }) => {
 
   return (
     <View style={[{ flex: 1 }, styles.container]}>
-      <View style={styles.header}>
-        <Image
-          style={styles.imageHeader}
-          source={require("../assets/icon.png")}
-          contentFit="cover"
-          transition={1000}
-        />
-        <Text style={styles.titleHeader}>DEPARTEMENTS DE FRANCE</Text>
-      </View>
+      <CustomHeader></CustomHeader>
+
       <CustomPager></CustomPager>
       <StatusBar style="auto" />
     </View>

@@ -24,7 +24,7 @@ export default function CustomPager() {
         </View>
         <View style={styles.page} key="4">
           <CustomImage source={require("../assets/liste.png")} /> 
-          <CustomButton label="Liste" link="Numero" navigation={navigation} />
+          <CustomButton label="Liste" link="Liste" navigation={navigation} />
         </View>
       </PagerView>
     </View>
