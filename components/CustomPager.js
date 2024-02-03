@@ -22,6 +22,10 @@ export default function CustomPager() {
         <View style={styles.page} key="3">
           <Text>Third page</Text>
         </View>
+        <View style={styles.page} key="4">
+          <CustomImage source={require("../assets/liste.png")} /> 
+          <CustomButton label="Liste" link="Numero" navigation={navigation} />
+        </View>
       </PagerView>
     </View>
   );

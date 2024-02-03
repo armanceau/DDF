@@ -22,6 +22,7 @@ export default function App() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [selectedStyle, setSelectedStyle] = useState(null);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -123,13 +124,21 @@ export default function App() {
     if (selectedOption.nom === question.nom) {
       console.log('Bonne réponse!');
       setScore(score + 1);
+      setSelectedStyle('correctOption');
     } else {
       console.log('Mauvaise réponse!');
       life.splice(0,1);
+      setSelectedStyle('incorrectOption');
     }
+
+
   
-    // Charger une nouvelle question aléatoires
-    loadRandomQuestion();
+    setTimeout(() => {
+      // Charger une nouvelle question aléatoire
+      loadRandomQuestion();
+      // Réinitialisez l'état du style après le chargement de la nouvelle question
+      setSelectedStyle(null);
+    }, 500);
   };  
 
   if ((availableOptions.length === 0) || (life.length === 0)) {
@@ -177,7 +186,6 @@ export default function App() {
   } 
   else 
   { 
-  
     return (
       <View style={styles.container}>
         <Text style={styles.numero}>{question.numero}</Text>
@@ -193,15 +201,21 @@ export default function App() {
         {
           options.map((option, index) => (
             <View key={index} style={styles.optionsContainer}>
-              <TouchableOpacity style={[
+              <TouchableOpacity
+                style={[
                   styles.optionBtn,
-                  option === question.nom ? styles.correctOption : styles.incorrectOption,
-                ]} key={index} onPress={() => handleAnswer(option)}>
+                  selectedStyle === 'correctOption' && option.nom === question.nom ? styles.correctOption : null,
+                  selectedStyle === 'incorrectOption' && option.nom === question.nom ? styles.incorrectOption : null,
+                ]}
+                key={index}
+                onPress={() => handleAnswer(option)}
+              >
                 <Text style={styles.optionText}>{option.nom}</Text>
               </TouchableOpacity>
-            </View>    
+            </View>
           ))
         }
+
 
         <StatusBar style="auto" />
       </View>
@@ -307,12 +321,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
-  // correctOption: {
-  //   backgroundColor: '#8BC34A', // Couleur verte pour la réponse correcte
-  // },
-  // incorrectOption: {
-  //   backgroundColor: '#F8945C', // Couleur rouge pour les réponses incorrectes
-  // },
+  correctOption: {
+    backgroundColor: '#8BC34A', // Couleur verte pour la réponse correcte
+  },
+  incorrectOption: {
+    backgroundColor: '#F8945C', // Couleur rouge pour les réponses incorrectes
+  },
   optionText: {
     color: '#fff',
     fontSize: 20,
