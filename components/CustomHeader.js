@@ -27,8 +27,12 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "center",
     },
-        imageHeader: {
+    imageHeader: {
+        position: "absolute",
+        left: 0,
+        top: 0,
         width: 70,
         height: 70,
     },
