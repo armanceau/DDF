@@ -38,7 +38,7 @@ export default function ListeScreen() {
         
             <StatusBar style="auto" />
         </View>
-      );
+    );
 };
 
 const styles = StyleSheet.create({

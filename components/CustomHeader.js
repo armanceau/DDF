@@ -1,18 +1,30 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
+import CustomButtonImage from './CustomButtonImage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Header() {
-  return (
-    <View style={styles.header}>
-        <Image
-          style={styles.imageHeader}
-          source={require("../assets/icon.png")}
-          contentFit="cover"
-          transition={1000}
-        />
-        <Text style={styles.titleHeader}>DEPARTEMENTS DE FRANCE</Text>
-    </View>
-  );
+    const navigation = useNavigation();
+
+    return (
+        <View style={styles.header}>
+            <Image
+            style={styles.imageHeader}
+            source={require("../assets/icon.png")}
+            contentFit="cover"
+            transition={1000}
+            />
+
+            <Text style={styles.titleHeader}>DEPARTEMENTS DE FRANCE</Text>
+
+            <CustomButtonImage 
+            source={require("../assets/trophy.png")}
+            contentFit="cover"
+            transition={1000}
+            link="Score" navigation={navigation}
+            />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
