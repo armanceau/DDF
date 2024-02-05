@@ -7,9 +7,7 @@ import { useState, useEffect } from 'react';
 import CustomModal from '../components/CustomModal';
 import CustomButton from '../components/CustomButton';
 
-
-
-export default function App() {
+export default function NumeroScreen() {
   const db = SQLite.openDatabase('example.db');
   const [isLoading, setIsLoading] = useState(true);
   const [departements, setDepartements] = useState([]);
@@ -106,8 +104,11 @@ export default function App() {
     }, 500);
   };  
 
+  console.log(availableOptions.length, life.length);
+
   if ((availableOptions.length === 0) || (life.length === 0)) {
     let additionalContent = null;
+    console.log('test');
 
     if (score <= 45) {
       additionalContent = 
@@ -136,6 +137,18 @@ export default function App() {
           />
         </View>;
     }
+
+    db.transaction((tx) => {
+        tx.executeSql(
+          "UPDATE score SET best_score = "+score+", date_score = date('now') WHERE categorie_score = 'numeros' AND "+score+" >= best_score;",
+          [],
+          (txObj, resultSet) => {
+            console.log("Mise à jour réussie. Lignes affectées : ", resultSet.rowsAffected);
+          },
+          (txObj, error) => console.log(error)
+        )
+    });
+
   
     return (
       <View style={styles.container}>

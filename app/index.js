@@ -67,7 +67,7 @@ const IndexScreen = ({ navigation }) => {
                     console.log('la table est vide');
                     // La table est vide, effectuez l'insertion
                     txObj.executeSql(
-                    "INSERT INTO score (best_score, date_score, categorie_score) VALUES ('', '', 'numero'), ('', '', 'drapeau');",
+                    "INSERT INTO score (best_score, date_score, categorie_score) VALUES (0, '', 'numeros'), (0, '', 'drapeaux');",
                     (txObj, resultSet) => {
                         // Vous pouvez ajouter d'autres transactions d'insertion si nécessaire
                     },
