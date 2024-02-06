@@ -138,6 +138,8 @@ export default function NumeroScreen() {
         </View>;
     }
 
+    console.log("UPDATE score SET best_score = "+score+", date_score = date('now') WHERE categorie_score = 'numeros' AND "+score+" >= best_score;");
+
     db.transaction((tx) => {
         tx.executeSql(
           "UPDATE score SET best_score = "+score+", date_score = date('now') WHERE categorie_score = 'numeros' AND "+score+" >= best_score;",
