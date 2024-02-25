@@ -20,9 +20,6 @@ export default function CustomPager() {
           <CustomButton label="Drapeau" link="Drapeau" navigation={navigation} />
         </View>
         <View style={styles.page} key="3">
-          <Text>Third page</Text>
-        </View>
-        <View style={styles.page} key="4">
           <CustomImage source={require("../assets/liste.png")} /> 
           <CustomButton label="Liste" link="Liste" navigation={navigation} />
         </View>
