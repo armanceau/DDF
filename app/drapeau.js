@@ -171,6 +171,10 @@ export default function DrapeauScreen() {
     return (
       <View style={styles.container}>
         <Text style={styles.numero}>{question.numero}</Text>
+        <Image
+            style={styles.imageDrapeau}
+            source={require("../assets/flags/1.png")} 
+          />
         <View style={styles.containerScore}>
           <Text style={styles.score}>{score}/{totalQuestions}</Text>
         </View>
@@ -271,6 +275,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+
+  imageDrapeau: {
+    width: "80%",
+    height: "25%", 
+    borderRadius: 20,
   },
   numero: {
     fontSize: 80,
