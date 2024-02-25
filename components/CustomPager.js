@@ -17,7 +17,7 @@ export default function CustomPager() {
         </View>
         <View style={styles.page} key="2">
           <CustomImage source={require("../assets/drapeaux.png")} /> 
-          <CustomButton label="Drapeau" link="Numero" navigation={navigation} />
+          <CustomButton label="Drapeau" link="Drapeau" navigation={navigation} />
         </View>
         <View style={styles.page} key="3">
           <Text>Third page</Text>
