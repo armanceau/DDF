@@ -98,10 +98,8 @@ const IndexScreen = ({ navigation }) => {
 
     return (
         <View style={[{ flex: 1 }, styles.container]}>
-        <CustomHeader></CustomHeader>
-
-        <CustomPager></CustomPager>
-        <StatusBar style="auto" />
+            <CustomHeader></CustomHeader>
+            <CustomPager></CustomPager>
         </View>
   );
 };
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#10B4A4',
         justifyContent: 'center',
     },
-    header:{
+    header:{  
         position: "relative",
         width: "100%",
         display: "flex",

@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         elevation: 5,
         display: "flex",
         flexDirection: "row",
+        marginTop: 50,
     },
     title:{
         fontSize: 40,

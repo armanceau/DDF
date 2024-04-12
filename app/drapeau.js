@@ -355,6 +355,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 50,
   },
   containerLife: {
     position: 'absolute',
@@ -369,6 +370,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     display: 'flex',
     alignItems: 'center',
+    marginTop: 50,
   },
   image: {
     width: "100%",
