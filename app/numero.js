@@ -119,7 +119,7 @@ export default function NumeroScreen() {
           />
         </View>;
     }
-    else if (score > 45 && score <= 75) {
+    else if (score > 45 && score <= 90) {
       additionalContent = 
         <View style={styles.Imagecontainer}>
           <Image
@@ -128,7 +128,7 @@ export default function NumeroScreen() {
           />
         </View>;
     }
-    else if (score >= 92) {
+    else if (score >= 91) {
       additionalContent = 
         <View style={styles.Imagecontainer}>
           <Image
